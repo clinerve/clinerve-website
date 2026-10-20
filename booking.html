@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#080b12">
+  <title>Plan your visit — CLINERVE</title>
+  <link rel="stylesheet" href="backend.css">
+</head>
+<body>
+  <main class="cl-shell">
+    <a class="cl-brand" href="index.html">CLINERVE<span>.</span></a>
+
+    <section class="cl-panel">
+      <p class="cl-muted">YOUR NEXT EXPERIENCE</p>
+      <h1>Plan a visit</h1>
+      <p class="cl-muted">
+        Send us your preferred visit details. A submitted request is not
+        a confirmed reservation; confirmation comes later.
+      </p>
+
+      <p id="booking-message" class="cl-message" role="status"
+         aria-live="polite"></p>
+
+      <form id="booking-form" class="cl-form">
+        <div class="cl-field">
+          <label for="booking-world">Choose a world</label>
+          <select id="booking-world" required>
+            <option value="">Select a world</option>
+            <option value="playverse">Playverse</option>
+            <option value="hypercinema">HyperCinema</option>
+            <option value="discovery">Discovery</option>
+            <option value="imagination">Imagination / Digital Art</option>
+          </select>
+        </div>
+
+        <div class="cl-field">
+          <label for="experience-name">Experience or visit purpose</label>
+          <input id="experience-name" maxlength="150" required
+                 placeholder="Enter the experience you are interested in">
+        </div>
+
+        <div class="cl-field">
+          <label for="visitor-name">Full name</label>
+          <input id="visitor-name" maxlength="100" autocomplete="name"
+                 required>
+        </div>
+
+        <div class="cl-field">
+          <label for="visitor-email">Email address</label>
+          <input id="visitor-email" type="email" autocomplete="email"
+                 maxlength="254" required>
+        </div>
+
+        <div class="cl-grid">
+          <div class="cl-field">
+            <label for="visit-date">Preferred date</label>
+            <input id="visit-date" type="date" required>
+          </div>
+
+          <div class="cl-field">
+            <label for="preferred-time">Preferred time</label>
+            <input id="preferred-time" type="time" required>
+          </div>
+        </div>
+
+        <div class="cl-field">
+          <label for="visitor-count">Number of visitors</label>
+          <input id="visitor-count" type="number" min="1" max="20"
+                 value="1" required>
+          <small class="cl-help">
+            Requests above 20 visitors should be arranged separately.
+          </small>
+        </div>
+
+        <div class="cl-field">
+          <label for="special-requests">Additional information (optional)</label>
+          <textarea id="special-requests" maxlength="2000"
+                    placeholder="Tell us anything relevant to your visit"></textarea>
+        </div>
+
+        <button id="booking-submit" class="cl-button" type="submit">
+          Submit booking request
+        </button>
+      </form>
+
+      <div class="cl-actions">
+        <a class="cl-button cl-button-secondary" href="account.html">
+          My account
+        </a>
+        <a class="cl-button cl-button-secondary" href="index.html">
+          Back to CLINERVE
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-client.js"></script>
+  <script src="booking.js"></script>
+</body>
+</html>
