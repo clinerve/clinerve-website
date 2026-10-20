@@ -196,3 +196,17 @@ h1 {
     border-radius: 16px;
   }
 }
+.cl-social-login {
+  display: grid;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.cl-social-login p {
+  margin: 0;
+  text-align: center;
+}
+
+.cl-social-login .cl-button {
+  width: 100%;
+}
