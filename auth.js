@@ -2,20 +2,20 @@
   const supabase = window.clinerveSupabase;
 
   if (!supabase) {
-    console.error("CLINERVE authentication client is unavailable.");
+    console.error("CLINERVE: Supabase client is unavailable.");
     return;
   }
 
-  const basePath = window.location.pathname.slice(
+  const basePath = location.pathname.slice(
     0,
-    window.location.pathname.lastIndexOf("/") + 1
+    location.pathname.lastIndexOf("/") + 1
   );
 
-  const baseUrl = window.location.origin + basePath;
+  const baseUrl = location.origin + basePath;
 
-  function showMessage(id, message) {
+  function showMessage(id, text) {
     const element = document.getElementById(id);
-    if (element) element.textContent = message;
+    if (element) element.textContent = text;
   }
 
   function safeNextPage() {
@@ -27,7 +27,73 @@
     return "account.html";
   }
 
-  // REGISTRATION
+  function goToNextPage() {
+    location.replace(baseUrl + safeNextPage());
+  }
+
+  // Handle a returning authenticated session, including OAuth redirects.
+  // Only redirect when a session exists.
+  supabase.auth.getSession().then(({ data, error }) => {
+    if (error) {
+      console.error("CLINERVE session check failed:", error);
+      return;
+    }
+
+    if (data.session) {
+      goToNextPage();
+    }
+  });
+
+  // GOOGLE AND GITHUB SIGN-IN
+  document.querySelectorAll("[data-oauth-provider]").forEach((button) => {
+    button.addEventListener("click", async () => {
+      const provider = button.dataset.oauthProvider;
+
+      if (!["google", "github"].includes(provider)) {
+        showMessage(
+          "login-message",
+          "This sign-in provider is not supported."
+        );
+        showMessage(
+          "signup-message",
+          "This sign-in provider is not supported."
+        );
+        return;
+      }
+
+      button.disabled = true;
+
+      showMessage("login-message", "Connecting to " + provider + "…");
+      showMessage("signup-message", "Connecting to " + provider + "…");
+
+      try {
+        const redirectUrl =
+          baseUrl + "login.html?next=" +
+          encodeURIComponent(safeNextPage());
+
+        const { error } = await supabase.auth.signInWithOAuth({
+          provider,
+          options: {
+            redirectTo: redirectUrl
+          }
+        });
+
+        if (error) throw error;
+        // Supabase normally redirects the browser to the provider.
+      } catch (error) {
+        console.error("CLINERVE OAuth error:", error);
+
+        const text =
+          error.message || "Could not start social sign-in. Please try again.";
+
+        showMessage("login-message", text);
+        showMessage("signup-message", text);
+        button.disabled = false;
+      }
+    });
+  });
+
+  // EMAIL REGISTRATION
   const signupForm = document.getElementById("signup-form");
 
   if (signupForm) {
@@ -41,8 +107,8 @@
       const password = document.getElementById("signup-password").value;
       const confirm = document.getElementById("signup-confirm").value;
 
-      if (name.length < 2) {
-        showMessage("signup-message", "Enter your full name.");
+      if (name.length < 2 || name.length > 100) {
+        showMessage("signup-message", "Enter a valid full name.");
         return;
       }
 
@@ -63,7 +129,8 @@
           password,
           options: {
             data: { full_name: name },
-            emailRedirectTo: baseUrl + "login.html?next=" +
+            emailRedirectTo:
+              baseUrl + "login.html?next=" +
               encodeURIComponent(safeNextPage())
           }
         });
@@ -71,13 +138,12 @@
         if (error) throw error;
 
         if (data.session) {
-          showMessage("signup-message", "Account created. Opening your account…");
-          location.replace(baseUrl + safeNextPage());
+          goToNextPage();
         } else {
           showMessage(
             "signup-message",
-            "Registration submitted. Check your email for the confirmation link. " +
-            "After confirming, return here and sign in."
+            "Registration submitted. Check your email for confirmation, " +
+            "then return to sign in."
           );
         }
       } catch (error) {
@@ -91,7 +157,7 @@
     });
   }
 
-  // LOGIN
+  // EMAIL/PASSWORD LOGIN
   const loginForm = document.getElementById("login-form");
 
   if (loginForm) {
@@ -114,7 +180,7 @@
 
         if (error) throw error;
 
-        location.replace(baseUrl + safeNextPage());
+        goToNextPage();
       } catch (error) {
         showMessage(
           "login-message",
@@ -126,7 +192,7 @@
     });
   }
 
-  // REQUEST PASSWORD RESET
+  // PASSWORD RESET EMAIL
   const forgotButton = document.getElementById("forgot-password");
 
   if (forgotButton) {
@@ -137,7 +203,7 @@
       if (!email) {
         showMessage(
           "login-message",
-          "Enter your email address first, then request a reset."
+          "Enter your email address first."
         );
         return;
       }
@@ -153,8 +219,7 @@
 
         showMessage(
           "login-message",
-          "If this address is registered, a password reset email will be sent. " +
-          "Follow its link and return to this page."
+          "If this address is registered, a password reset email will be sent."
         );
       } catch (error) {
         showMessage(
@@ -167,21 +232,21 @@
     });
   }
 
-  // PASSWORD RESET: Supabase returns the user to this page with
-  // a recovery session in the URL/session.
+  // COMPLETE PASSWORD RESET
   const resetForm = document.getElementById("reset-form");
+if (
+  resetForm &&
+  new URLSearchParams(location.hash.slice(1)).get("type") === "recovery"
+) {
+  resetForm.hidden = false;
 
+  showMessage(
+    "login-message",
+    "Choose and confirm your new password below."
+  );
+}
+  
   if (resetForm) {
-    const hashParams = new URLSearchParams(location.hash.slice(1));
-
-    if (hashParams.get("type") === "recovery") {
-      resetForm.hidden = false;
-      showMessage(
-        "login-message",
-        "Choose a new password below."
-      );
-    }
-
     resetForm.addEventListener("submit", async (event) => {
       event.preventDefault();
 
@@ -201,6 +266,7 @@
           await supabase.auth.getSession();
 
         if (sessionError) throw sessionError;
+
         if (!sessionData.session) {
           throw new Error(
             "Your reset session is missing or expired. Request a new reset email."
@@ -213,12 +279,17 @@
 
         showMessage(
           "login-message",
-          "Password updated successfully. You can now use your new password."
+          "Password updated successfully. You can now sign in with it."
         );
 
         resetForm.reset();
         resetForm.hidden = true;
-        history.replaceState(null, "", location.pathname + location.search);
+
+        history.replaceState(
+          null,
+          "",
+          location.pathname + location.search
+        );
       } catch (error) {
         showMessage(
           "login-message",
