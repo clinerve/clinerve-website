@@ -2,12 +2,12 @@
    Use only the Project URL and publishable/anon key here. */
 
 (() => {
-  const PROJECT_URL = "PASTE_YOUR_SUPABASE_PROJECT_URL_HERE";
-  const PUBLISHABLE_KEY = "PASTE_YOUR_SUPABASE_PUBLISHABLE_KEY_HERE";
+  const PROJECT_URL = "https://kdstzbmmnvfyoikkfjyb.supabase.co";
+  const PUBLISHABLE_KEY = sb_publishable_qR1hfTsl_Ax63bVosNQtIA_J47R6Wns;
 
   if (
-    PROJECT_URL.includes("PASTE_") ||
-    PUBLISHABLE_KEY.includes("PASTE_")
+    PROJECT_URL.includes("https://kdstzbmmnvfyoikkfjyb.supabase.co") ||
+    PUBLISHABLE_KEY.includes(sb_publishable_qR1hfTsl_Ax63bVosNQtIA_J47R6Wns)
   ) {
     console.error("CLINERVE: Add the Supabase URL and publishable key.");
     return;
