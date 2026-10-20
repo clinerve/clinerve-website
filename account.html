@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#080b12">
+  <title>My account — CLINERVE</title>
+  <link rel="stylesheet" href="backend.css">
+</head>
+<body>
+  <main class="cl-shell">
+    <a class="cl-brand" href="index.html">CLINERVE<span>.</span></a>
+
+    <section class="cl-panel">
+      <p class="cl-muted">YOUR PRIVATE SPACE</p>
+      <h1>My account</h1>
+
+      <p id="account-message" class="cl-message" role="status"
+         aria-live="polite">Loading your account…</p>
+
+      <div id="account-content" hidden>
+        <h2 id="account-name">Welcome</h2>
+        <p id="account-email" class="cl-muted"></p>
+
+        <div class="cl-actions">
+          <a class="cl-button" href="booking.html">Plan a visit</a>
+          <a class="cl-button cl-button-secondary" href="index.html">
+            Explore CLINERVE
+          </a>
+          <button id="logout-button" class="cl-button cl-button-secondary"
+                  type="button">Log out</button>
+        </div>
+
+        <h2>Your booking requests</h2>
+        <div id="booking-history" aria-live="polite">
+          <p class="cl-muted">Loading your requests…</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-client.js"></script>
+  <script src="account.js"></script>
+</body>
+</html>
