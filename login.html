@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#080b12">
+  <title>Sign in — CLINERVE</title>
+  <link rel="stylesheet" href="backend.css">
+</head>
+<body>
+  <main class="cl-shell">
+    <a class="cl-brand" href="index.html">CLINERVE<span>.</span></a>
+
+    <section class="cl-panel">
+      <p class="cl-muted">WELCOME BACK</p>
+      <h1>Your CLINERVE account</h1>
+      <p class="cl-muted">
+        Sign in to manage your bookings and visit requests.
+      </p>
+
+      <p id="login-message" class="cl-message" role="status"
+         aria-live="polite"></p>
+
+      <form id="login-form" class="cl-form">
+        <div class="cl-field">
+          <label for="login-email">Email address</label>
+          <input id="login-email" name="email" type="email"
+                 autocomplete="email" required maxlength="254">
+        </div>
+
+        <div class="cl-field">
+          <label for="login-password">Password</label>
+          <input id="login-password" name="password" type="password"
+                 autocomplete="current-password" required>
+        </div>
+
+        <button id="login-submit" class="cl-button" type="submit">
+          Sign in
+        </button>
+      </form>
+
+      <div class="cl-actions">
+        <button id="forgot-password" class="cl-button cl-button-secondary"
+                type="button">
+          Send password reset email
+        </button>
+      </div>
+
+      <form id="reset-form" class="cl-form" hidden>
+        <h2>Choose a new password</h2>
+        <div class="cl-field">
+          <label for="reset-password">New password</label>
+          <input id="reset-password" type="password"
+                 autocomplete="new-password" minlength="8" required>
+        </div>
+        <div class="cl-field">
+          <label for="reset-confirm">Confirm new password</label>
+          <input id="reset-confirm" type="password"
+                 autocomplete="new-password" minlength="8" required>
+        </div>
+        <button class="cl-button" type="submit">Update password</button>
+      </form>
+
+      <p class="cl-footer">
+        New to CLINERVE? <a href="signup.html">Create an account</a>.
+      </p>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-client.js"></script>
+  <script src="auth.js"></script>
+</body>
+</html>
