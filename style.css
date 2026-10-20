@@ -360,7 +360,7 @@ section {
 .eyebrow {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 18px;
   color: var(--lime);
   font-size: .73rem;
   letter-spacing: .15em;
@@ -374,19 +374,6 @@ section {
   width: 27px;
   height: 1px;
   background: var(--lime);
-}
-
-.pronunciation {
-  margin: 27px 0 0;
-  color: #f0f0e8;
-  font-size: .72rem;
-  letter-spacing: .17em;
-  font-weight: 750;
-}
-
-.pronunciation span {
-  color: var(--lime);
-  padding-inline: 5px;
 }
 
 .hero-title {
