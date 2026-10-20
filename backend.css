@@ -1,0 +1,198 @@
+:root {
+  color-scheme: dark;
+  --cl-bg: #080b12;
+  --cl-panel: #111722;
+  --cl-border: rgba(221, 248, 194, 0.17);
+  --cl-lime: #b8f45b;
+  --cl-mint: #ddf8c2;
+  --cl-text: #f3f5f7;
+  --cl-muted: #a8b0bd;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  padding: 28px 16px;
+  background:
+    radial-gradient(ellipse at top, #19251e 0%, transparent 42%),
+    var(--cl-bg);
+  color: var(--cl-text);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+a {
+  color: var(--cl-mint);
+}
+
+.cl-shell {
+  width: min(100%, 760px);
+  margin: 0 auto;
+}
+
+.cl-brand {
+  display: inline-block;
+  margin-bottom: 24px;
+  color: var(--cl-text);
+  text-decoration: none;
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+}
+
+.cl-brand span {
+  color: var(--cl-lime);
+}
+
+.cl-panel {
+  padding: clamp(20px, 5vw, 36px);
+  border: 1px solid var(--cl-border);
+  border-radius: 22px;
+  background: rgba(17, 23, 34, 0.92);
+  box-shadow: 0 20px 70px rgba(0, 0, 0, 0.28);
+}
+
+h1 {
+  margin-top: 0;
+  font-size: clamp(1.8rem, 6vw, 2.7rem);
+  line-height: 1.1;
+}
+
+.cl-muted,
+.cl-help {
+  color: var(--cl-muted);
+  line-height: 1.65;
+}
+
+.cl-form {
+  display: grid;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.cl-field {
+  display: grid;
+  gap: 8px;
+}
+
+.cl-field label {
+  font-size: 0.94rem;
+  font-weight: 700;
+}
+
+.cl-field input,
+.cl-field select,
+.cl-field textarea {
+  width: 100%;
+  padding: 13px 14px;
+  border: 1px solid var(--cl-border);
+  border-radius: 11px;
+  background: #090e16;
+  color: var(--cl-text);
+  font: inherit;
+}
+
+.cl-field textarea {
+  min-height: 110px;
+  resize: vertical;
+}
+
+.cl-field input:focus,
+.cl-field select:focus,
+.cl-field textarea:focus {
+  outline: 2px solid var(--cl-lime);
+  outline-offset: 2px;
+}
+
+.cl-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 46px;
+  padding: 12px 18px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--cl-lime);
+  color: #10150b;
+  font: inherit;
+  font-weight: 800;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.cl-button:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.cl-button-secondary {
+  border: 1px solid var(--cl-border);
+  background: transparent;
+  color: var(--cl-mint);
+}
+
+.cl-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 20px 0;
+}
+
+.cl-message {
+  padding: 12px 14px;
+  border: 1px solid var(--cl-border);
+  border-radius: 10px;
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+}
+
+.cl-message:empty {
+  display: none;
+}
+
+.cl-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.cl-booking {
+  margin-top: 14px;
+  padding: 16px;
+  border: 1px solid var(--cl-border);
+  border-radius: 14px;
+  overflow-wrap: anywhere;
+}
+
+.cl-booking p {
+  line-height: 1.6;
+}
+
+.cl-status {
+  color: var(--cl-lime);
+  font-weight: 700;
+}
+
+.cl-footer {
+  margin-top: 24px;
+  color: var(--cl-muted);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+@media (max-width: 560px) {
+  body {
+    padding: 18px 12px;
+  }
+
+  .cl-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cl-panel {
+    border-radius: 16px;
+  }
+}
