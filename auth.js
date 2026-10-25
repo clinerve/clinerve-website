@@ -31,17 +31,23 @@
     location.replace(baseUrl + safeNextPage());
   }
 
-  // Handle a returning authenticated session, including OAuth redirects.
-  // Only redirect when a session exists.
-  supabase.auth.getSession().then(({ data, error }) => {
-    if (error) {
-      console.error("CLINERVE session check failed:", error);
-      return;
-    }
+  // Detect password recovery before checking the session.
+const recoveryParams = new URLSearchParams(location.hash.slice(1));
 
-    if (data.session) {
-      goToNextPage();
-    }
+const isRecovery =
+  recoveryParams.get("type") === "recovery" ||
+  new URLSearchParams(location.search).get("type") === "recovery";
+
+// Redirect signed-in users, except when they are resetting a password.
+supabase.auth.getSession().then(({ data, error }) => {
+  if (error) {
+    console.error("CLINERVE session check failed:", error);
+    return;
+  }
+
+  if (data.session && !isRecovery) {
+    goToNextPage();
+  }
   });
 
   // GOOGLE AND GITHUB SIGN-IN
@@ -232,12 +238,9 @@
     });
   }
 
-  // COMPLETE PASSWORD RESET
-  const resetForm = document.getElementById("reset-form");
-if (
-  resetForm &&
-  new URLSearchParams(location.hash.slice(1)).get("type") === "recovery"
-) {
+const resetForm = document.getElementById("reset-form");
+
+if (resetForm && isRecovery) {
   resetForm.hidden = false;
 
   showMessage(
