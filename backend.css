@@ -210,3 +210,25 @@ h1 {
 .cl-social-login .cl-button {
   width: 100%;
 }
+/* Text-style action links */
+.cl-text-button {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--cl-mint);
+  font: inherit;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  cursor: pointer;
+}
+
+.cl-text-button:hover,
+.cl-text-button:focus-visible {
+  color: var(--cl-lime);
+}
+
+/* Ensure hidden forms remain hidden */
+[hidden] {
+  display: none !important;
+  }
