@@ -31,24 +31,28 @@
     location.replace(baseUrl + safeNextPage());
   }
 
-  // Detect password recovery before checking the session.
-const recoveryParams = new URLSearchParams(location.hash.slice(1));
+  // Password recovery is handled on its own page.
+const isResetPage =
+  location.pathname.endsWith("/reset-password.html");
+
+const recoveryParams =
+  new URLSearchParams(location.hash.slice(1));
 
 const isRecovery =
   recoveryParams.get("type") === "recovery" ||
   new URLSearchParams(location.search).get("type") === "recovery";
 
-// Redirect signed-in users, except when they are resetting a password.
+// Keep password recovery on its dedicated page.
 supabase.auth.getSession().then(({ data, error }) => {
   if (error) {
     console.error("CLINERVE session check failed:", error);
     return;
   }
 
-  if (data.session && !isRecovery) {
+  if (data.session && !isRecovery && !isResetPage) {
     goToNextPage();
   }
-  });
+});
 
   // GOOGLE AND GITHUB SIGN-IN
   document.querySelectorAll("[data-oauth-provider]").forEach((button) => {
@@ -198,107 +202,177 @@ supabase.auth.getSession().then(({ data, error }) => {
     });
   }
 
-  // PASSWORD RESET EMAIL
-  const forgotButton = document.getElementById("forgot-password");
+// SHOW OR HIDE THE PASSWORD-RESET REQUEST FORM
+const forgotToggle = document.getElementById("forgot-password");
+const forgotForm = document.getElementById("forgot-form");
+const loginFormForReset = document.getElementById("login-form");
+const socialLogin = document.querySelector(".cl-social-login");
+const loginActions = document.querySelector(".cl-actions");
 
-  if (forgotButton) {
-    forgotButton.addEventListener("click", async () => {
-      const email = document.getElementById("login-email").value
-        .trim().toLowerCase();
+if (forgotToggle && forgotForm) {
+  forgotToggle.addEventListener("click", () => {
+    const opening = forgotForm.hidden;
 
-      if (!email) {
-        showMessage(
-          "login-message",
-          "Enter your email address first."
-        );
-        return;
-      }
+    forgotForm.hidden = !opening;
 
-      forgotButton.disabled = true;
+    if (loginFormForReset) {
+      loginFormForReset.hidden = opening;
+    }
 
-      try {
-        const { error } = await supabase.auth.resetPasswordForEmail(email, {
-          redirectTo: baseUrl + "login.html"
+    if (socialLogin) {
+      socialLogin.hidden = opening;
+    }
+
+    if (loginActions) {
+      loginActions.hidden = opening;
+    }
+
+    forgotToggle.textContent = opening
+      ? "Back to sign in"
+      : "Forgot password?";
+
+    showMessage("login-message", "");
+  });
+}
+
+// SEND THE PASSWORD-RESET EMAIL
+if (forgotForm) {
+  forgotForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    const button = document.getElementById("reset-email-submit");
+
+    const email = document.getElementById("reset-email")
+      .value.trim().toLowerCase();
+
+    button.disabled = true;
+
+    showMessage(
+      "login-message",
+      "Sending password reset link…"
+    );
+
+    try {
+      const { error } =
+        await supabase.auth.resetPasswordForEmail(email, {
+          redirectTo: baseUrl + "reset-password.html"
         });
 
-        if (error) throw error;
+      if (error) throw error;
 
-        showMessage(
-          "login-message",
-          "If this address is registered, a password reset email will be sent."
-        );
-      } catch (error) {
-        showMessage(
-          "login-message",
-          error.message || "Could not request a password reset."
-        );
-      } finally {
-        forgotButton.disabled = false;
-      }
-    });
-  }
+      showMessage(
+        "login-message",
+        "If this address is registered, a password reset email will be sent. Open the email link to choose a new password."
+      );
+    } catch (error) {
+      showMessage(
+        "login-message",
+        error.message || "Could not request a password reset."
+      );
+    } finally {
+      button.disabled = false;
+    }
+  });
+}
 
+// COMPLETE PASSWORD RESET ON THE DEDICATED PAGE
 const resetForm = document.getElementById("reset-form");
 
-if (resetForm && isRecovery) {
-  resetForm.hidden = false;
+if (resetForm && isResetPage) {
+  const submitButton =
+    resetForm.querySelector('button[type="submit"]');
 
-  showMessage(
-    "login-message",
-    "Choose and confirm your new password below."
-  );
-}
-  
-  if (resetForm) {
-    resetForm.addEventListener("submit", async (event) => {
-      event.preventDefault();
+  if (isRecovery) {
+    resetForm.hidden = false;
 
-      const password = document.getElementById("reset-password").value;
-      const confirm = document.getElementById("reset-confirm").value;
+    showMessage(
+      "reset-message",
+      "Choose and confirm your new password below."
+    );
+  } else {
+    showMessage(
+      "reset-message",
+      "Open the password-reset link from your email to continue."
+    );
 
-      if (password.length < 8 || password !== confirm) {
-        showMessage(
-          "login-message",
-          "Passwords must match and contain at least 8 characters."
-        );
-        return;
-      }
-
-      try {
-        const { data: sessionData, error: sessionError } =
-          await supabase.auth.getSession();
-
-        if (sessionError) throw sessionError;
-
-        if (!sessionData.session) {
-          throw new Error(
-            "Your reset session is missing or expired. Request a new reset email."
-          );
-        }
-
-        const { error } = await supabase.auth.updateUser({ password });
-
-        if (error) throw error;
-
-        showMessage(
-          "login-message",
-          "Password updated successfully. You can now sign in with it."
-        );
-
-        resetForm.reset();
-        resetForm.hidden = true;
-
-        history.replaceState(
-          null,
-          "",
-          location.pathname + location.search
-        );
-      } catch (error) {
-        showMessage(
-          "login-message",
-          error.message || "Could not update the password."
-        );
-      }
-    });
+    if (submitButton) {
+      submitButton.disabled = true;
+    }
   }
+
+  resetForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    const password =
+      document.getElementById("reset-password").value;
+
+    const confirm =
+      document.getElementById("reset-confirm").value;
+
+    if (password.length < 8 || password !== confirm) {
+      showMessage(
+        "reset-message",
+        "Passwords must match and contain at least 8 characters."
+      );
+      return;
+    }
+
+    if (!isRecovery) {
+      showMessage(
+        "reset-message",
+        "This reset link is invalid or expired. Request a new reset email."
+      );
+      return;
+    }
+
+    if (submitButton) {
+      submitButton.disabled = true;
+    }
+
+    try {
+      const {
+        data: sessionData,
+        error: sessionError
+      } = await supabase.auth.getSession();
+
+      if (sessionError) throw sessionError;
+
+      if (!sessionData.session) {
+        throw new Error(
+          "Your reset session is missing or expired. Request a new reset email."
+        );
+      }
+
+      const { error } =
+        await supabase.auth.updateUser({ password });
+
+      if (error) throw error;
+
+      showMessage(
+        "reset-message",
+        "Password updated successfully. You can now return to sign in."
+      );
+
+      resetForm.reset();
+      resetForm.hidden = true;
+
+      await supabase.auth.signOut();
+
+      history.replaceState(
+        null,
+        "",
+        location.pathname
+      );
+    } catch (error) {
+      showMessage(
+        "reset-message",
+        error.message || "Could not update the password."
+      );
+    } finally {
+      if (submitButton) {
+        submitButton.disabled = false;
+      }
+    }
+  });
+      }
 })();
