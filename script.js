@@ -5,6 +5,56 @@ document.addEventListener("DOMContentLoaded", () => {
   const nav = document.querySelector(".navigation");
   const progress = document.querySelector(".scroll-progress");
   const year = document.querySelector("#year");
+  // Homepage account navigation.
+const accountNav = document.getElementById("account-nav");
+const authClient = window.clinerveSupabase;
+
+function setAccountNav(user) {
+  if (!accountNav) return;
+
+  if (user) {
+    accountNav.href = "account.html";
+    accountNav.textContent = "My account";
+    accountNav.setAttribute(
+      "aria-label",
+      "Open your CLINERVE account"
+    );
+  } else {
+    accountNav.href = "login.html";
+    accountNav.textContent = "Sign in";
+    accountNav.setAttribute(
+      "aria-label",
+      "Sign in to CLINERVE"
+    );
+  }
+}
+
+async function updateAccountNav() {
+  if (!accountNav || !authClient) return;
+
+  try {
+    const { data, error } = await authClient.auth.getUser();
+
+    if (error) throw error;
+
+    setAccountNav(data.user);
+  } catch (error) {
+    console.error(
+      "CLINERVE account navigation check failed:",
+      error
+    );
+
+    setAccountNav(null);
+  }
+}
+
+updateAccountNav();
+
+if (authClient) {
+  authClient.auth.onAuthStateChange((_event, session) => {
+    setAccountNav(session?.user ?? null);
+  });
+}
 
   const reduceMotion = window.matchMedia(
     "(prefers-reduced-motion: reduce)"
