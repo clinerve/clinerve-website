@@ -56,27 +56,44 @@
   </button>
 </div>
       
-      <div class="cl-actions">
-        <button id="forgot-password" class="cl-button cl-button-secondary"
-                type="button">
-          Send password reset email
-        </button>
-      </div>
+<div class="cl-actions">
+  <button
+    id="forgot-password"
+    class="cl-text-button"
+    type="button"
+  >
+    Forgot password?
+  </button>
+</div>
 
-      <form id="reset-form" class="cl-form" hidden>
-        <h2>Choose a new password</h2>
-        <div class="cl-field">
-          <label for="reset-password">New password</label>
-          <input id="reset-password" type="password"
-                 autocomplete="new-password" minlength="8" required>
-        </div>
-        <div class="cl-field">
-          <label for="reset-confirm">Confirm new password</label>
-          <input id="reset-confirm" type="password"
-                 autocomplete="new-password" minlength="8" required>
-        </div>
-        <button class="cl-button" type="submit">Update password</button>
-      </form>
+<form id="forgot-form" class="cl-form" hidden>
+  <h2>Reset your password</h2>
+
+  <p class="cl-muted">
+    Enter the email address connected to your CLINERVE account.
+    We’ll send you a secure link to choose a new password.
+  </p>
+
+  <div class="cl-field">
+    <label for="reset-email">Email address</label>
+    <input
+      id="reset-email"
+      name="email"
+      type="email"
+      autocomplete="email"
+      required
+      maxlength="254"
+    >
+  </div>
+
+  <button
+    id="reset-email-submit"
+    class="cl-button"
+    type="submit"
+  >
+    Send password reset link
+  </button>
+</form>
 
       <p class="cl-footer">
         New to CLINERVE? <a href="signup.html">Create an account</a>.
