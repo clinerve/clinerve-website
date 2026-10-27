@@ -2170,3 +2170,299 @@ button:focus-visible {
     margin-top: 0.25rem;
   }
 }
+/* =========================================================
+CLINERVE — RED, WHITE & BLACK BRAND EVOLUTION
+Preserves the existing layout, structure and animations.
+========================================================= */
+
+:root {
+/* New brand palette */
+--bg: #0B0B0D;
+--surface: #151518;
+--surface-light: #202024;
+--lime: #D62839;
+--mint: #FFFFFF;
+--mint-brown: #F2F2F2;
+--white: #FFFFFF;
+--muted: #C5C5CB;
+--line: rgba(255, 255, 255, 0.14);
+
+/* New supporting colours */
+--brand-red: #D62839;
+--brand-red-light: #F04452;
+--brand-red-dark: #941B29;
+--brand-black: #0B0B0D;
+--brand-white: #FFFFFF;
+}
+
+/* Keep the existing page structure while refreshing its atmosphere */
+body {
+color: var(--white);
+background-color: var(--bg);
+}
+
+/* Cleaner, more premium sticky navigation */
+.header,
+.header.scrolled {
+background: rgba(11, 11, 13, 0.94);
+border-bottom-color: rgba(214, 40, 57, 0.35);
+}
+
+/* Brand name and logo accents */
+.brand-name {
+color: var(--white);
+}
+
+.brand-e {
+color: var(--brand-red);
+text-shadow: 0 0 18px rgba(214, 40, 57, 0.35);
+}
+
+.brand-tag {
+color: #E7E7E7;
+}
+
+/* Navigation accents */
+.nav-link:hover,
+.nav-link.active {
+color: var(--brand-red-light);
+}
+
+.nav-link::after {
+background: var(--brand-red);
+}
+
+.nav-cta {
+border-color: rgba(214, 40, 57, 0.75);
+}
+
+.nav-cta span {
+color: var(--brand-red-light);
+}
+
+.nav-cta:hover {
+background: rgba(214, 40, 57, 0.12);
+}
+
+/* Hero section: preserve imagery and cinematic overlays */
+.hero {
+background-color: var(--brand-black);
+}
+
+.hero-orb {
+background: var(--brand-red);
+opacity: 0.16;
+}
+
+.orb-two {
+background: var(--brand-red-light);
+}
+
+.eyebrow,
+.eyebrow-line {
+color: var(--brand-red-light);
+}
+
+.eyebrow-line {
+background: var(--brand-red);
+}
+
+.hero-motto {
+color: #FFFFFF;
+}
+
+/* Main call-to-action: stronger red, clean white text */
+.button-primary {
+color: #FFFFFF;
+background: linear-gradient(
+115deg,
+#B91F30,
+#D62839,
+#F04452,
+#D62839
+);
+background-size: 250% 100%;
+box-shadow: 0 8px 28px rgba(214, 40, 57, 0.24);
+}
+
+.button:hover {
+box-shadow: 0 12px 35px rgba(214, 40, 57, 0.24);
+}
+
+.button-ghost:hover {
+border-color: var(--brand-red);
+background: rgba(214, 40, 57, 0.12);
+}
+
+.note-dot {
+background: var(--brand-red);
+box-shadow: 0 0 14px rgba(214, 40, 57, 0.65);
+}
+
+.scroll-line {
+background: var(--brand-red);
+}
+
+.hero-index span {
+color: var(--brand-red-light);
+}
+
+/* Experience section: darker neutral backgrounds with red highlights */
+.experiences {
+background:
+radial-gradient(
+ellipse at 5% 12%,
+rgba(214, 40, 57, 0.10),
+transparent 38%
+),
+#101013;
+}
+
+.experience-card {
+border-color: rgba(255, 255, 255, 0.18);
+background-color: var(--surface);
+}
+
+.experience-card::after {
+background: linear-gradient(
+135deg,
+rgba(214, 40, 57, 0.24),
+transparent 58%
+);
+}
+
+.card-kicker,
+.title-period,
+.card-link {
+color: var(--brand-red-light);
+}
+
+.experience-card:hover {
+border-color: var(--brand-red);
+box-shadow:
+0 25px 60px rgba(0, 0, 0, 0.28),
+0 0 24px rgba(214, 40, 57, 0.10);
+}
+
+.experience-card:hover .card-symbol {
+color: #FFFFFF;
+background: var(--brand-red);
+border-color: var(--brand-red);
+}
+
+/* People-first section: retain its lighter background,
+but replace its green accents with the new red identity */
+.human-section {
+color: #171719;
+background: #F5F5F5;
+}
+
+.human-section .eyebrow,
+.human-section .eyebrow-line {
+color: var(--brand-red-dark);
+}
+
+.human-section .eyebrow-line {
+background: var(--brand-red);
+}
+
+.human-section .section-title {
+color: #171719;
+}
+
+.human-section .light-text {
+background-image: linear-gradient(
+100deg,
+#941B29,
+#D62839,
+#F04452,
+#941B29
+);
+}
+
+.value-number {
+color: var(--brand-red-dark);
+}
+
+.values-list,
+.value-item {
+border-color: rgba(23, 23, 25, 0.16);
+}
+
+/* Image caption and manifesto */
+.image-caption {
+background: #111113;
+border-color: rgba(214, 40, 57, 0.48);
+}
+
+.caption-mark {
+color: var(--brand-red-light);
+}
+
+.manifesto {
+background-color: #101013;
+}
+
+.text-cta {
+color: var(--brand-red-light);
+border-bottom-color: rgba(214, 40, 57, 0.7);
+}
+
+.text-cta:hover {
+border-color: var(--brand-red-light);
+}
+
+/* Visit panel: restrained red glow instead of green */
+.visit-panel {
+border-color: rgba(214, 40, 57, 0.38);
+background: linear-gradient(
+135deg,
+#202024,
+#141417 65%,
+#241519
+);
+}
+
+.visit-glow {
+background: var(--brand-red);
+}
+
+/* Account navigation */
+.nav-account {
+border-color: var(--brand-red);
+color: var(--brand-red-light);
+}
+
+.nav-account:hover,
+.nav-account:focus-visible {
+color: #FFFFFF;
+background: var(--brand-red);
+}
+
+/* Images and cards: subtle red interaction rather than a heavy glow */
+.world-photo {
+border-color: rgba(214, 40, 57, 0.20);
+}
+
+.world-photo h3 {
+color: var(--brand-red-light);
+}
+
+/* Consistent keyboard accessibility */
+a:focus-visible,
+button:focus-visible {
+outline: 2px solid var(--brand-red-light);
+outline-offset: 4px;
+}
+
+/* Respect visitors who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+*,
+*::before,
+*::after {
+scroll-behavior: auto !important;
+animation-duration: 0.01ms !important;
+animation-iteration-count: 1 !important;
+transition-duration: 0.01ms !important;
+}
+}
