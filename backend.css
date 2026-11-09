@@ -346,3 +346,201 @@ h3 {
     transition: none;
   }
     }
+/* =========================================
+   CLINERVE — PREMIUM BOOKING FORM
+========================================= */
+
+.cl-form {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 21px;
+  margin-top: 30px;
+}
+
+.cl-field {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 9px;
+  min-width: 0;
+}
+
+.cl-field label {
+  color: var(--cl-text);
+  font-size: .88rem;
+  font-weight: 700;
+  letter-spacing: .015em;
+}
+
+.cl-field input,
+.cl-field select,
+.cl-field textarea {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  min-height: 52px;
+  padding: 14px 16px;
+  border: 1px solid rgba(221, 248, 194, .2);
+  border-radius: 12px;
+  outline: none;
+  background: #10150f;
+  color: var(--cl-text);
+  font: inherit;
+  font-size: .94rem;
+  transition:
+    border-color .25s ease,
+    box-shadow .25s ease,
+    background .25s ease;
+}
+
+.cl-field input::placeholder,
+.cl-field textarea::placeholder {
+  color: #899184;
+  opacity: 1;
+}
+
+.cl-field input:hover,
+.cl-field select:hover,
+.cl-field textarea:hover {
+  border-color: rgba(184, 244, 91, .45);
+}
+
+.cl-field input:focus,
+.cl-field select:focus,
+.cl-field textarea:focus {
+  border-color: var(--cl-lime);
+  background: #151c13;
+  box-shadow: 0 0 0 4px rgba(184, 244, 91, .09);
+}
+
+.cl-field select {
+  appearance: none;
+  cursor: pointer;
+  padding-right: 42px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23b8f45b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 15px center;
+}
+
+.cl-field select option {
+  background: #191e18;
+  color: #fbfcf7;
+}
+
+.cl-field input[type="date"],
+.cl-field input[type="time"] {
+  color-scheme: dark;
+}
+
+.cl-field input[type="number"] {
+  max-width: 180px;
+}
+
+.cl-field textarea {
+  min-height: 125px;
+  resize: vertical;
+  line-height: 1.65;
+}
+
+.cl-help {
+  margin-top: -2px;
+  font-size: .78rem;
+}
+
+.cl-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 17px;
+}
+
+#booking-submit {
+  width: 100%;
+  min-height: 54px;
+  margin-top: 5px;
+  border-radius: 13px;
+  font-size: .94rem;
+  letter-spacing: .01em;
+  box-shadow: 0 8px 25px rgba(184, 244, 91, .12);
+}
+
+#booking-submit:hover {
+  box-shadow: 0 12px 32px rgba(184, 244, 91, .2);
+}
+
+#booking-submit:disabled {
+  opacity: .6;
+  cursor: wait;
+}
+
+#booking-message {
+  margin: 18px 0;
+  line-height: 1.65;
+  overflow-wrap: anywhere;
+}
+
+#booking-message:not(:empty) {
+  border-color: rgba(184, 244, 91, .3);
+  background: rgba(184, 244, 91, .055);
+}
+
+#booking-form + .cl-actions {
+  padding-top: 23px;
+  border-top: 1px solid var(--cl-border);
+}
+
+.cl-actions {
+  gap: 12px;
+}
+
+.cl-actions .cl-button {
+  min-height: 47px;
+  padding-inline: 20px;
+}
+
+/* Mobile booking experience */
+@media (max-width: 600px) {
+  .cl-form {
+    gap: 19px;
+  }
+
+  .cl-grid {
+    grid-template-columns: 1fr;
+    gap: 19px;
+  }
+
+  .cl-field input,
+  .cl-field select,
+  .cl-field textarea {
+    min-height: 51px;
+    font-size: 16px;
+  }
+
+  .cl-field textarea {
+    min-height: 115px;
+  }
+
+  .cl-field input[type="number"] {
+    max-width: 100%;
+  }
+
+  #booking-submit {
+    min-height: 55px;
+  }
+
+  .cl-actions {
+    flex-direction: column;
+  }
+
+  .cl-actions .cl-button {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cl-field input,
+  .cl-field select,
+  .cl-field textarea,
+  #booking-submit {
+    transition: none;
+  }
+  }
+  
