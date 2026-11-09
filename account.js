@@ -1,8 +1,14 @@
 (() => {
   const supabase = window.clinerveSupabase;
 
+  const message = document.getElementById("account-message");
+  const content = document.getElementById("account-content");
+  const history = document.getElementById("booking-history");
+  const themeMessage = document.getElementById("theme-message");
+  const saveThemeButton = document.getElementById("save-theme");
+
   if (!supabase) {
-    document.getElementById("account-message").textContent =
+    message.textContent =
       "The account service did not load. Refresh and try again.";
     return;
   }
@@ -11,11 +17,12 @@
     0,
     location.pathname.lastIndexOf("/") + 1
   );
+
   const baseUrl = location.origin + basePath;
 
-  const message = document.getElementById("account-message");
-  const content = document.getElementById("account-content");
-  const history = document.getElementById("booking-history");
+  let currentUser = null;
+
+  const allowedThemes = ["signature", "midnight", "light"];
 
   function escapeText(value) {
     return String(value ?? "").replace(/[&<>"']/g, (character) => ({
@@ -27,25 +34,88 @@
     })[character]);
   }
 
-  async function loadAccount() {
-    const { data, error } = await supabase.auth.getUser();
+  function applyTheme(theme) {
+    const safeTheme = allowedThemes.includes(theme)
+      ? theme
+      : "signature";
 
-    if (error || !data.user) {
-      location.replace(baseUrl + "login.html?next=account.html");
+    document.documentElement.dataset.homeTheme = safeTheme;
+
+    const selectedInput = document.querySelector(
+      `input[name="homepage-theme"][value="${safeTheme}"]`
+    );
+
+    if (selectedInput) {
+      selectedInput.checked = true;
+    }
+  }
+
+  async function loadTheme(user) {
+    const { data, error } = await supabase
+      .from("user_preferences")
+      .select("homepage_theme")
+      .eq("user_id", user.id)
+      .maybeSingle();
+
+    if (error) {
+      console.error("CLINERVE theme loading error:", error);
+      applyTheme("signature");
+      themeMessage.textContent =
+        "Your saved appearance could not be loaded. You can still choose a theme.";
       return;
     }
 
-    const user = data.user;
-    const name = user.user_metadata?.full_name || "CLINERVE visitor";
+    applyTheme(data?.homepage_theme || "signature");
+  }
 
-    document.getElementById("account-name").textContent =
-      "Welcome, " + name;
-    document.getElementById("account-email").textContent = user.email || "";
+  async function saveTheme() {
+    if (!currentUser) return;
 
-    message.textContent = "";
-    content.hidden = false;
+    const selected = document.querySelector(
+      'input[name="homepage-theme"]:checked'
+    );
 
-    const { data: bookings, error: bookingError } = await supabase
+    const theme = selected?.value || "signature";
+
+    if (!allowedThemes.includes(theme)) {
+      themeMessage.textContent = "Please select a valid theme.";
+      return;
+    }
+
+    saveThemeButton.disabled = true;
+    saveThemeButton.textContent = "Saving…";
+    themeMessage.textContent = "";
+
+    const { error } = await supabase
+      .from("user_preferences")
+      .upsert(
+        {
+          user_id: currentUser.id,
+          homepage_theme: theme,
+          updated_at: new Date().toISOString()
+        },
+        {
+          onConflict: "user_id"
+        }
+      );
+
+    saveThemeButton.disabled = false;
+    saveThemeButton.textContent = "Save appearance";
+
+    if (error) {
+      console.error("CLINERVE theme saving error:", error);
+      themeMessage.textContent =
+        "Your theme could not be saved. Please try again.";
+      return;
+    }
+
+    applyTheme(theme);
+    themeMessage.textContent =
+      "Your homepage appearance has been saved successfully.";
+  }
+
+  async function loadBookings() {
+    const { data: bookings, error } = await supabase
       .from("booking_requests")
       .select(
         "reference_code, world, experience_name, visit_date, " +
@@ -53,11 +123,12 @@
       )
       .order("created_at", { ascending: false });
 
-    if (bookingError) {
+    if (error) {
       history.textContent =
         "Your account loaded, but your bookings could not be retrieved. " +
         "Please try again later.";
-      console.error("CLINERVE booking history error:", bookingError);
+
+      console.error("CLINERVE booking history error:", error);
       return;
     }
 
@@ -71,7 +142,8 @@
       <article class="cl-booking">
         <h3>${escapeText(booking.experience_name)}</h3>
         <p>
-          Reference: <strong>${escapeText(booking.reference_code)}</strong><br>
+          Reference:
+          <strong>${escapeText(booking.reference_code)}</strong><br>
           World: ${escapeText(booking.world)}<br>
           Visit date: ${escapeText(booking.visit_date)}<br>
           Preferred time: ${escapeText(booking.preferred_time)}<br>
@@ -82,6 +154,36 @@
       </article>
     `).join("");
   }
+
+  async function loadAccount() {
+    const { data, error } = await supabase.auth.getUser();
+
+    if (error || !data.user) {
+      location.replace(baseUrl + "login.html?next=account.html");
+      return;
+    }
+
+    currentUser = data.user;
+
+    const name =
+      currentUser.user_metadata?.full_name || "CLINERVE visitor";
+
+    document.getElementById("account-name").textContent =
+      "Welcome, " + name;
+
+    document.getElementById("account-email").textContent =
+      currentUser.email || "";
+
+    message.textContent = "";
+    content.hidden = false;
+
+    await Promise.all([
+      loadTheme(currentUser),
+      loadBookings()
+    ]);
+  }
+
+  saveThemeButton.addEventListener("click", saveTheme);
 
   document.getElementById("logout-button").addEventListener(
     "click",
@@ -102,7 +204,8 @@
   );
 
   loadAccount().catch((error) => {
-    console.error(error);
-    message.textContent = "Could not load your account. Refresh and try again.";
+    console.error("CLINERVE account error:", error);
+    message.textContent =
+      "Could not load your account. Refresh and try again.";
   });
 })();
