@@ -3,24 +3,31 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#080b12">
-  <title>My account — CLINERVE</title>
+  <meta name="theme-color" content="#10130f">
+  <title>My Account — CLINERVE</title>
   <link rel="stylesheet" href="backend.css">
 </head>
 <body>
   <main class="cl-shell">
-    <a class="cl-brand" href="index.html">CLINERVE<span>.</span></a>
+    <a class="cl-brand" href="index.html">
+      CLINERVE<span>.</span>
+    </a>
 
     <section class="cl-panel">
-      <p class="cl-muted">YOUR PRIVATE SPACE</p>
+      <p class="cl-eyebrow">YOUR PRIVATE SPACE</p>
       <h1>My account</h1>
 
       <p id="account-message" class="cl-message" role="status"
          aria-live="polite">Loading your account…</p>
 
       <div id="account-content" hidden>
-        <h2 id="account-name">Welcome</h2>
-        <p id="account-email" class="cl-muted"></p>
+        <div class="cl-welcome">
+          <div>
+            <h2 id="account-name">Welcome</h2>
+            <p id="account-email" class="cl-muted"></p>
+          </div>
+          <span class="cl-member-label">CLINERVE MEMBER</span>
+        </div>
 
         <div class="cl-actions">
           <a class="cl-button" href="booking.html">Plan a visit</a>
@@ -31,12 +38,79 @@
                   type="button">Log out</button>
         </div>
 
-        <h2>Your booking requests</h2>
-        <div id="booking-history" aria-live="polite">
-          <p class="cl-muted">Loading your requests…</p>
-        </div>
+        <section class="cl-section" aria-labelledby="appearance-title">
+          <p class="cl-eyebrow">MAKE IT YOURS</p>
+          <h2 id="appearance-title">Homepage appearance</h2>
+          <p class="cl-muted">
+            Choose the atmosphere you want when you explore CLINERVE.
+            Your choice is saved to your account and follows you across devices.
+          </p>
+
+          <div class="cl-theme-grid">
+            <label class="cl-theme-option">
+              <input type="radio" name="homepage-theme"
+                     value="signature" checked>
+              <span class="cl-theme-preview theme-signature">
+                <span class="preview-brand">CLINERVE.</span>
+                <span class="preview-glow"></span>
+                <span class="preview-line"></span>
+              </span>
+              <span class="cl-theme-name">Signature</span>
+              <span class="cl-theme-description">
+                Original green, mint and warm earthy tones.
+              </span>
+            </label>
+
+            <label class="cl-theme-option">
+              <input type="radio" name="homepage-theme"
+                     value="midnight">
+              <span class="cl-theme-preview theme-midnight">
+                <span class="preview-brand">CLINERVE.</span>
+                <span class="preview-glow"></span>
+                <span class="preview-line"></span>
+              </span>
+              <span class="cl-theme-name">Midnight</span>
+              <span class="cl-theme-description">
+                Deep navy with cool blue and silver accents.
+              </span>
+            </label>
+
+            <label class="cl-theme-option">
+              <input type="radio" name="homepage-theme"
+                     value="light">
+              <span class="cl-theme-preview theme-light">
+                <span class="preview-brand">CLINERVE.</span>
+                <span class="preview-glow"></span>
+                <span class="preview-line"></span>
+              </span>
+              <span class="cl-theme-name">Light</span>
+              <span class="cl-theme-description">
+                Soft ivory with forest-green accents.
+              </span>
+            </label>
+          </div>
+
+          <p id="theme-message" class="cl-help" role="status"
+             aria-live="polite"></p>
+
+          <button id="save-theme" class="cl-button" type="button">
+            Save appearance
+          </button>
+        </section>
+
+        <section class="cl-section" aria-labelledby="bookings-title">
+          <p class="cl-eyebrow">YOUR ACTIVITY</p>
+          <h2 id="bookings-title">Your booking requests</h2>
+          <div id="booking-history" aria-live="polite">
+            <p class="cl-muted">Loading your requests…</p>
+          </div>
+        </section>
       </div>
     </section>
+
+    <p class="cl-footer">
+      CLINERVE — FEEL THE FUTURE.
+    </p>
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
