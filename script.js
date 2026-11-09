@@ -1,3 +1,51 @@
+/* CLINERVE saved homepage appearance */
+
+(async function loadClinerveTheme() {
+  const client = window.clinerveSupabase;
+
+  if (!client) return;
+
+  const validThemes = ["signature", "midnight", "light"];
+
+  function applySavedTheme(theme) {
+    const selectedTheme = validThemes.includes(theme)
+      ? theme
+      : "signature";
+
+    document.documentElement.dataset.homeTheme = selectedTheme;
+  }
+
+  async function getUserTheme(user) {
+    if (!user) {
+      applySavedTheme("signature");
+      return;
+    }
+
+    const { data, error } = await client
+      .from("user_preferences")
+      .select("homepage_theme")
+      .eq("user_id", user.id)
+      .maybeSingle();
+
+    if (error) {
+      console.error("CLINERVE theme retrieval failed:", error);
+      applySavedTheme("signature");
+      return;
+    }
+
+    applySavedTheme(data?.homepage_theme || "signature");
+  }
+
+  const { data, error } = await client.auth.getUser();
+
+  if (!error) {
+    await getUserTheme(data.user);
+  }
+
+  client.auth.onAuthStateChange((_event, session) => {
+    getUserTheme(session?.user ?? null);
+  });
+})();
 document.addEventListener("DOMContentLoaded", () => {
   const body = document.body;
   const header = document.querySelector(".header");
