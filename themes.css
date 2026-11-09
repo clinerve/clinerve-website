@@ -1,0 +1,114 @@
+/*
+  CLINERVE homepage themes
+  Signature is the original brand palette.
+*/
+
+/* ORIGINAL CLINERVE PALETTE */
+:root[data-home-theme="signature"] {
+  color-scheme: dark;
+
+  --bg: #10130f;
+  --surface: #191e18;
+  --surface-light: #242b22;
+  --lime: #b8f45b;
+  --mint: #ddf8c2;
+  --mint-brown: #c6b69b;
+  --white: #fbfcf7;
+  --muted: #d0d4c9;
+  --line: rgba(221, 248, 194, .2);
+}
+
+/* MIDNIGHT */
+:root[data-home-theme="midnight"] {
+  color-scheme: dark;
+
+  --bg: #0c1220;
+  --surface: #151e30;
+  --surface-light: #202c42;
+  --lime: #83aaff;
+  --mint: #dce8ff;
+  --mint-brown: #aebbd0;
+  --white: #f4f7ff;
+  --muted: #c1cbe0;
+  --line: rgba(220, 232, 255, .2);
+}
+
+:root[data-home-theme="midnight"] body {
+  background-color: var(--bg);
+  color: var(--white);
+}
+
+/* LIGHT */
+:root[data-home-theme="light"] {
+  color-scheme: light;
+
+  --bg: #f1f0e7;
+  --surface: #ffffff;
+  --surface-light: #e5e9dc;
+  --lime: #527a4d;
+  --mint: #29432e;
+  --mint-brown: #8a755b;
+  --white: #203126;
+  --muted: #596657;
+  --line: rgba(41, 67, 46, .2);
+}
+
+:root[data-home-theme="light"] body {
+  background-color: var(--bg);
+  color: var(--white);
+}
+
+:root[data-home-theme="light"] .header {
+  background: rgba(241, 240, 231, .92);
+  border-bottom-color: var(--line);
+}
+
+:root[data-home-theme="light"] .navigation a,
+:root[data-home-theme="light"] .brand {
+  color: var(--white);
+}
+
+:root[data-home-theme="light"] .nav-account {
+  color: var(--lime);
+  border-color: var(--lime);
+}
+
+:root[data-home-theme="light"] .nav-account:hover {
+  background: var(--lime);
+  color: #ffffff;
+}
+
+:root[data-home-theme="light"] .hero-shade {
+  background: linear-gradient(
+    90deg,
+    rgba(241, 240, 231, .9),
+    rgba(241, 240, 231, .55),
+    rgba(241, 240, 231, .12)
+  );
+}
+
+:root[data-home-theme="light"] .hero-title,
+:root[data-home-theme="light"] .hero-description,
+:root[data-home-theme="light"] .hero-motto,
+:root[data-home-theme="light"] .pronunciation {
+  color: #203126;
+}
+
+:root[data-home-theme="light"] .light-text {
+  color: #527a4d;
+}
+
+:root[data-home-theme="light"] .section,
+:root[data-home-theme="light"] .world-section {
+  color: var(--white);
+}
+
+:root[data-home-theme="light"] .button-primary {
+  background: var(--lime);
+  color: #ffffff;
+}
+
+:root[data-home-theme="light"] .button-ghost {
+  border-color: var(--lime);
+  color: var(--lime);
+}
