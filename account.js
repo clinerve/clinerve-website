@@ -1,4 +1,6 @@
 (() => {
+  "use strict";
+
   const supabase = window.clinerveSupabase;
 
   const message = document.getElementById("account-message");
@@ -6,6 +8,7 @@
   const history = document.getElementById("booking-history");
   const themeMessage = document.getElementById("theme-message");
   const saveThemeButton = document.getElementById("save-theme");
+  const logoutButton = document.getElementById("logout-button");
 
   if (!supabase) {
     message.textContent =
@@ -13,19 +16,16 @@
     return;
   }
 
-  const basePath = location.pathname.slice(
-    0,
-    location.pathname.lastIndexOf("/") + 1
-  );
+  const basePath =
+    location.pathname.slice(0, location.pathname.lastIndexOf("/") + 1);
 
   const baseUrl = location.origin + basePath;
+  const allowedThemes = ["signature", "midnight", "light"];
 
   let currentUser = null;
 
-  const allowedThemes = ["signature", "midnight", "light"];
-
   function escapeText(value) {
-    return String(value ?? "").replace(/[&<>"']/g, (character) => ({
+    return String(value ?? "").replace(/[&<>"']/g, character => ({
       "&": "&amp;",
       "<": "&lt;",
       ">": "&gt;",
@@ -45,9 +45,7 @@
       `input[name="homepage-theme"][value="${safeTheme}"]`
     );
 
-    if (selectedInput) {
-      selectedInput.checked = true;
-    }
+    if (selectedInput) selectedInput.checked = true;
   }
 
   async function loadTheme(user) {
@@ -58,10 +56,10 @@
       .maybeSingle();
 
     if (error) {
-      console.error("CLINERVE theme loading error:", error);
+      console.error("Theme loading error:", error);
       applyTheme("signature");
       themeMessage.textContent =
-        "Your saved appearance could not be loaded. You can still choose a theme.";
+        "Your saved appearance could not be loaded.";
       return;
     }
 
@@ -86,32 +84,31 @@
     saveThemeButton.textContent = "Saving…";
     themeMessage.textContent = "";
 
-    const { error } = await supabase
-      .from("user_preferences")
-      .upsert(
-        {
-          user_id: currentUser.id,
-          homepage_theme: theme,
-          updated_at: new Date().toISOString()
-        },
-        {
-          onConflict: "user_id"
-        }
-      );
+    try {
+      const { error } = await supabase
+        .from("user_preferences")
+        .upsert(
+          {
+            user_id: currentUser.id,
+            homepage_theme: theme,
+            updated_at: new Date().toISOString()
+          },
+          { onConflict: "user_id" }
+        );
 
-    saveThemeButton.disabled = false;
-    saveThemeButton.textContent = "Save appearance";
+      if (error) throw error;
 
-    if (error) {
-      console.error("CLINERVE theme saving error:", error);
+      applyTheme(theme);
+      themeMessage.textContent =
+        "Your homepage appearance has been saved successfully.";
+    } catch (error) {
+      console.error("Theme saving error:", error);
       themeMessage.textContent =
         "Your theme could not be saved. Please try again.";
-      return;
+    } finally {
+      saveThemeButton.disabled = false;
+      saveThemeButton.textContent = "Save appearance";
     }
-
-    applyTheme(theme);
-    themeMessage.textContent =
-      "Your homepage appearance has been saved successfully.";
   }
 
   async function loadBookings() {
@@ -124,11 +121,9 @@
       .order("created_at", { ascending: false });
 
     if (error) {
+      console.error("Booking history error:", error);
       history.textContent =
-        "Your account loaded, but your bookings could not be retrieved. " +
-        "Please try again later.";
-
-      console.error("CLINERVE booking history error:", error);
+        "Your bookings could not be retrieved. Please try again later.";
       return;
     }
 
@@ -138,7 +133,7 @@
       return;
     }
 
-    history.innerHTML = bookings.map((booking) => `
+    history.innerHTML = bookings.map(booking => `
       <article class="cl-booking">
         <h3>${escapeText(booking.experience_name)}</h3>
         <p>
@@ -185,34 +180,29 @@
 
   saveThemeButton.addEventListener("click", saveTheme);
 
-  document.getElementById("logout-button").addEventListener(
-    "click",
-    async () => {
-  document.getElementById("logout-button").addEventListener(
-  "click",
-  async () => {
-    const button = document.getElementById("logout-button");
-    const originalText = button.innerHTML;
+  logoutButton.addEventListener("click", async () => {
+    const originalText = logoutButton.innerHTML;
 
-    button.disabled = true;
-    button.innerHTML = "<span>Signing out…</span>";
+    logoutButton.disabled = true;
+    logoutButton.innerHTML = "<span>Signing out…</span>";
 
     const { error } = await supabase.auth.signOut();
 
     if (error) {
+      console.error("Logout error:", error);
       message.textContent = "Could not log out. Please try again.";
-      button.disabled = false;
-      button.innerHTML = originalText;
+      logoutButton.disabled = false;
+      logoutButton.innerHTML = originalText;
       return;
     }
 
     location.replace(baseUrl + "login.html");
-  }
-);
+  });
 
-  loadAccount().catch((error) => {
-    console.error("CLINERVE account error:", error);
+  loadAccount().catch(error => {
+    console.error("Account loading error:", error);
     message.textContent =
       "Could not load your account. Refresh and try again.";
   });
 })();
+        
