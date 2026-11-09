@@ -188,20 +188,27 @@
   document.getElementById("logout-button").addEventListener(
     "click",
     async () => {
-      const button = document.getElementById("logout-button");
-      button.disabled = true;
+  document.getElementById("logout-button").addEventListener(
+  "click",
+  async () => {
+    const button = document.getElementById("logout-button");
+    const originalText = button.innerHTML;
 
-      const { error } = await supabase.auth.signOut();
+    button.disabled = true;
+    button.innerHTML = "<span>Signing out…</span>";
 
-      if (error) {
-        message.textContent = "Could not log out. Please try again.";
-        button.disabled = false;
-        return;
-      }
+    const { error } = await supabase.auth.signOut();
 
-      location.replace(baseUrl + "login.html");
+    if (error) {
+      message.textContent = "Could not log out. Please try again.";
+      button.disabled = false;
+      button.innerHTML = originalText;
+      return;
     }
-  );
+
+    location.replace(baseUrl + "login.html");
+  }
+);
 
   loadAccount().catch((error) => {
     console.error("CLINERVE account error:", error);
